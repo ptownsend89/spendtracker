@@ -12,34 +12,26 @@ public class Main {
 
     public static void main(String[] args) {
 
+//
+//        System.out.println("Welcome, expenditure app open.");
+//        System.out.println("******************************\n");
+//        System.out.println("Enter username: \n");
+//        String userName = scan.nextLine();
+//        System.out.println("Now enter password");
+//        String pword = scan.nextLine();
+//        UserProfile user = new UserProfile(userName, pword);
+//        user.createUser(userName, pword);
 
-        System.out.println("Welcome, expenditure app open.");
-        System.out.println("******************************\n");
-        System.out.println("Enter username: \n");
-        String userName = scan.nextLine();
-        System.out.println("Now enter password");
-        String pword = scan.nextLine();
-        UserProfile user = new UserProfile(userName, pword);
-        user.createUser(userName, pword);
+
         System.out.println("Please enter total income this month: ");
         double totalIncome = scan.nextDouble();
-        SpendCounter SpendCounter = new SpendCounter(totalIncome);
+        SpendCounter spendCounter = new SpendCounter(totalIncome);
         System.out.println("Total income this month is: £" + totalIncome);
         System.out.println("");
         System.out.println("");
-
         boolean quit = false;
         while (!quit) {
-            System.out.println(" ");
-            System.out.println("----MAIN MENU----");
-            System.out.println("To add a single spend, press (1)");
-            System.out.println("To show individual SpendCounter this month, press (2)");
-            System.out.println("To delete an entry, press (3)");
-            System.out.println("To show total spent this month, press (4)");
-            System.out.println("To search for a specific amount, press (5)");
-            System.out.println("To add an item note, press (6)");
-            System.out.println("To quit the app, press (7)");
-            System.out.println(" ");
+            spendCounter.mainMenu();
             double input;
             int indexInput;
             int selection = scan.nextInt();
@@ -48,14 +40,16 @@ public class Main {
                 System.out.println(" ");
             }
             switch (selection) {
+                case 0: // show menu
+                    spendCounter.mainMenu();
                 case 1: // enter a spend
                     System.out.println("Enter amount: ");
                     input = scan.nextDouble();
-                    SpendCounter.addItem(input);
+                    spendCounter.addItem(input);
                     break;
                 case 2: // show individual entries
                     //input=scan.nextLine();
-                    SpendCounter.showSavings(); // show all entries
+                    spendCounter.showSavings(); // show all entries
                     break;
                 case 3: // delete entry
                     System.out.println("Show all entries? Press (Y) for Yes, (N) for No");
@@ -65,31 +59,31 @@ public class Main {
                         switch (option) {
                             case "Y":
                                 System.out.println("Entries: ");
-                                SpendCounter.showSavings();
+                                spendCounter.showSavings();
                                 System.out.println("Enter item number to remove:");
                                 indexInput = scan.nextInt();
-                                SpendCounter.removeItem(indexInput);
+                                spendCounter.removeItem(indexInput);
                                 escape = true;
                                 break;
                             case "N":
                                 System.out.println("Enter item number to remove:");
                                 indexInput = scan.nextInt();
-                                SpendCounter.removeItem(indexInput);
+                                spendCounter.removeItem(indexInput);
                                 escape = true;
                                 break;
                         }
                     }
                 case 4: // show total savings/SpendCounter
-                    SpendCounter.showTotal();
+                    spendCounter.showTotal();
                     break;
                 case 5: // find a specific entry
                     System.out.println("Enter amount to search: ");
                     double doubleInput = scan.nextDouble();
-                    SpendCounter.findEntry(doubleInput);
+                    spendCounter.findEntry(doubleInput);
                     System.out.println("£"+doubleInput+" found.");
                     break;
                 case 6: // add item note
-                    SpendCounter.addNote();
+                    spendCounter.addNote();
                     break;
                 case 7: // exit
                     quit = true;
@@ -107,11 +101,3 @@ public class Main {
 
     }
 }
-//    class MySQLCon{
-//        Class.[INSERT HERE]("com.mysql.jdbc.Driver");
-//        Connection con = DriverManager.getConnection("database-1.ccphuhpftsbi.us-east-2.rds.amazonaws.com",
-//                "admin","PToWnHaNd1959");
-//        Statement stmnt = con.createStatement();
-//        ResultSet rs = stmnt.executeQuery("SELECT * FROM ")
-//    }
-//}

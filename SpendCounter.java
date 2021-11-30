@@ -18,20 +18,25 @@ public class SpendCounter {
         MonthlySaving newSaving = new MonthlySaving(amount);
         spendList.add(newSaving);
         setInitialIncome(initialIncome-amount);
-        System.out.println("£" + amount + " spent, new savings total: "+(this.initialIncome));
+        System.out.println("£" + amount + " spent, new savings total: £"+(this.initialIncome));
         System.out.println(" ");
     }
 
     public void removeItem(int position) {
-        MonthlySaving findItem = spendList.get(position - 1);
-        boolean exists = spendList.contains(findItem);
-        if (exists) {
-            spendList.remove(findItem);
-            setInitialIncome(initialIncome+findItem.getSavings());
-            System.out.println("£" + findItem.getSavings() + " removed, list adjusted");
-        } else {
-            System.out.println("Item at " + position + "does not exist, try again");
-            // throws an error, not print this message??
+        try {
+            MonthlySaving findItem = spendList.get(position - 1);
+            boolean exists = spendList.contains(findItem);
+            if (exists) {
+                spendList.remove(findItem);
+                setInitialIncome(initialIncome + findItem.getSavings());
+                System.out.println("£" + findItem.getSavings() + " removed, list adjusted");
+            } else {
+                System.out.println("Item at " + position + "does not exist, try again");
+                // throws an error, not print this message??
+            }
+        }
+        catch (IndexOutOfBoundsException e){
+            System.out.println("Incorrect list number, try deleting again");
         }
     }
 
@@ -60,11 +65,11 @@ public class SpendCounter {
     }
 
     public void showTotal() {
-        // calculate and show both running total of remaining savings pot
+        // calculate and show running total of remaining savings pot
         // and how much spent overall
         for (int i = 0; i < spendList.size(); i++) {
             MonthlySaving savingsTotalObj = spendList.get(i);
-            System.out.println("Entry " + (i + 1) + ": " + savingsTotalObj.getSavings());
+            System.out.println("Entry " + (i + 1) + ": " + savingsTotalObj.toString());
         }
         System.out.println("Total savings: £" + initialIncome);
         System.out.println("Total amount spent: £" + runningTotalSpend());
@@ -72,34 +77,37 @@ public class SpendCounter {
 
     public boolean addNote() {
         Scanner sc = new Scanner(System.in);
+        String itemNote;
         System.out.println("Entries: ");
         showSavings();
         System.out.println("Enter item number to add a note to: ");
         int scInput = sc.nextInt();
         sc.nextLine();
-        MonthlySaving addToSaving = spendList.get(scInput - 1);
+        MonthlySaving itemAdd = spendList.get(scInput - 1);
         MonthlySaving emptySaving = new MonthlySaving(0);
         emptySaving.setItemInfo("");
-        if (addToSaving.getItemInfo().equals(emptySaving.getItemInfo())) {
+        if (itemAdd.getItemInfo().equals(emptySaving.getItemInfo())) {
             System.out.println("Enter note to add to item: ");
-            String itemNote = sc.nextLine();
-            addToSaving.setItemInfo(itemNote);
-            System.out.println("New saving info for item number " + spendList.get(scInput - 1) + ": "
-                    + addToSaving.getSavings());
-            return false; // item doesn't exist
-        } else {
-            System.out.println("Item info already exists. Rewrite? (Y)/(N)");
-            boolean exitChoice = true;
-            while(exitChoice){
+            itemNote = sc.nextLine();
+            itemAdd.setItemInfo(itemNote);
+            System.out.println("New saving info for item number " + scInput + ": "
+                    + itemAdd.getItemInfo());
+            return false; // item doesn't exist - proceed with adding
+        } else { // item info exists - give option to proceed with adding
+            System.out.println("Item info "+itemAdd.getItemInfo()+" already exists. Rewrite? (Y)/(N)");
+            boolean exit = true;
+            while(exit){
                 String choice = sc.nextLine().toUpperCase();
                 if (choice.equals("Y")){
-                    String itemNote = sc.nextLine();
-                    addToSaving.setItemInfo(itemNote);
+                    System.out.println("Add item note: ");
+                    itemNote = sc.nextLine();
+                    itemAdd.setItemInfo(itemNote);
                     System.out.println("'"+itemNote + "' added to item "+scInput+".");
-                    exitChoice = false;
+                    exit = false;
                 } else if (choice.equals("N")){
-                    System.out.println("Item number "+scInput+" info: "+addToSaving.getItemInfo());
-                    exitChoice = false;
+                    System.out.println("Item number "+scInput+" item info: "+itemAdd.getItemInfo());
+                    mainMenu();
+                    exit = false;
                 }
             }
         }
@@ -113,5 +121,33 @@ public class SpendCounter {
             MonthlySaving savingsTotal = spendList.get(i);
             totalSpend += savingsTotal.getSavings(); //total SpendCounter this month
         } return totalSpend;
+    }
+
+    public void mainMenu(){
+        System.out.println("Show the main menu? (Y/N)");
+        Scanner sc = new Scanner(System.in);
+        String input;
+        boolean exit = true;
+        while (exit){
+            input = sc.nextLine().toUpperCase();
+            if (input.equals("Y")){
+                System.out.println(" \n =======================================================");
+                System.out.println("----MAIN MENU----");
+                System.out.println("To see the main menu, press (0)");
+                System.out.println("To add a single spend, press (1)");
+                System.out.println("To show individual spends this month, press (2)");
+                System.out.println("To delete an entry, press (3)");
+                System.out.println("To show total spent this month, press (4)");
+                System.out.println("To search for a specific amount, press (5)");
+                System.out.println("To add an item note, press (6)");
+                System.out.println("To quit the app, press (7)");
+                System.out.println("=======================================================  \n ");
+                exit = false;
+            } else if (input.equals("N")){
+                exit = false;
+            } else {
+                System.out.println("Invalid input, try again");
+            }
+        }
     }
 }

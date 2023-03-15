@@ -37,7 +37,7 @@ public class Main extends Application {
         layout.setAlignment(Pos.CENTER);
         layoutScene2.setAlignment(Pos.CENTER);
 
-        // ALWAYS INITIALISE YOUR OBJECTS DUMBASS!!
+        //
         Button login = new Button();
         // maxSize of 100.0, 5.0 large enough for "Click me" text:
         login.setMaxSize(100.0,5.0);
